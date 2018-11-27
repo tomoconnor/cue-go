@@ -108,6 +108,8 @@ type (
 		Pregap Time
 		// Length of the track postgap.
 		Postgap       Time
+		StartPosition float64
+		EndPosition   float64
 	}
 
 	// Audio file representation structure.
@@ -118,10 +120,26 @@ type (
 		Type FileType
 		// List of present tracks in the file.
 		Tracks []*Track
+		// Total duration in seconds
+		Duration float64
 	}
 )
 
 // Seconds returns length in seconds.
 func (time Time) Seconds() float64 {
 	return float64(time.Min*60) + float64(time.Sec) + float64(time.Frames)/framesPerSecond
+}
+
+// StartTime return track start time
+func (t *Track) StartTime() (time Time) {
+	if len(t.Indexes) == 1 {
+		time = t.Indexes[0].Time
+	} else if len(t.Indexes) > 1 {
+		time = t.Indexes[1].Time
+	}
+	return
+}
+
+func (t *Track) Duration() float64 {
+	return t.EndPosition - t.StartPosition
 }

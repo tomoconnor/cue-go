@@ -40,7 +40,7 @@ var parsersMap = map[string]commandParserDescriptor{
 }
 
 // Parse parses cue-sheet data (file) and returns filled Sheet struct.
-func Parse(reader io.Reader) (sheet *Sheet, err error) {
+func Parse(reader io.Reader, durations ...float64) (sheet *Sheet, err error) {
 	sheet = new(Sheet)
 
 	rd := bufio.NewReader(reader)
@@ -80,6 +80,27 @@ func Parse(reader io.Reader) (sheet *Sheet, err error) {
 		err = parserDescriptor.parser(params, sheet)
 		if err != nil {
 			return nil, fmt.Errorf("line %d: failed to parse %s command. %s", lineNumber, cmd, err.Error())
+		}
+	}
+
+	dLen := len(durations)
+
+	for fi, f := range sheet.Files {
+		if dLen > fi {
+			f.Duration = durations[fi]
+		}
+		for ti, t := range f.Tracks {
+			t.StartPosition = t.StartTime().Seconds()
+			var nextStart float64
+			if len(f.Tracks) > ti+1 {
+				nt := f.Tracks[ti+1]
+				if nextStart = nt.Pregap.Seconds(); nextStart == 0 {
+					nextStart = nt.StartTime().Seconds()
+				}
+			} else {
+				nextStart = f.Duration
+			}
+			t.EndPosition = nextStart
 		}
 	}
 
