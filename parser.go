@@ -2,8 +2,8 @@ package cue
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
+	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 	"unicode"
@@ -38,7 +38,7 @@ func parseCommand(line string) (cmd string, params []string, err error) {
 				// Quote can be started only at the beginnig of the parameter,
 				// but not in the middle.
 				if param.Len() != 0 {
-					err = errors.New("Unexpected quortation character.")
+					err = errors.New("unexpected quotation character")
 					return
 				}
 				quotedChar = c
@@ -52,7 +52,7 @@ func parseCommand(line string) (cmd string, params []string, err error) {
 			} else {
 				if c == '\\' { // Escape sequence in the text.
 					if i+1 >= l {
-						err = fmt.Errorf("Unfinished escape sequence")
+						err = errors.New("unfinished escape sequence")
 						return
 					}
 
@@ -73,7 +73,7 @@ func parseCommand(line string) (cmd string, params []string, err error) {
 			} else {
 				if c == '\\' { // Escape sequence in the text.
 					if i+1 >= l {
-						err = fmt.Errorf("Unfinished escape sequence")
+						err = errors.New("unfinished escape sequence")
 						return
 					}
 
@@ -108,7 +108,7 @@ func parseEscapeSequence(seq string) (char byte, err error) {
 
 	char, ok := m[seq]
 	if !ok {
-		err = fmt.Errorf("Usupported escape sequence '%s'", seq)
+		err = fmt.Errorf("usupported escape sequence '%s'", seq)
 	}
 
 	return
@@ -125,33 +125,33 @@ func isQuoteChar(char byte) bool {
 func parseTime(length string) (min int, sec int, frames int, err error) {
 	parts := strings.Split(length, ":")
 	if len(parts) != 3 {
-		err = errors.New("Illegal time format. mm:ss:ff should be.")
+		err = errors.New("illegal time format, mm:ss:ff should be")
 		return
 	}
 
 	min, err = strconv.Atoi(parts[0])
 	if err != nil {
-		err = errors.New("Failed to parse minutes. " + err.Error())
+		err = errors.Wrap(err, "failed to parse minutes")
 		return
 	}
 
 	sec, err = strconv.Atoi(parts[1])
 	if err != nil {
-		err = errors.New("Failed to parse seconds. " + err.Error())
+		err = errors.Wrap(err, "failed to parse seconds")
 		return
 	}
 	if sec > 59 {
-		err = errors.New("Failed to parse seconds. Seconds value can't be more than 59.")
+		err = errors.New("failed to parse seconds, seconds value can't be more than 59")
 		return
 	}
 
 	frames, err = strconv.Atoi(parts[2])
 	if err != nil {
-		err = errors.New("Failed to parse frames value. " + err.Error())
+		err = errors.Wrap(err, "failed to parse frames value")
 		return
 	}
-	if frames > 74 {
-		err = errors.New("Failed to parse frames. Frames value can't be more than 74.")
+	if frames > framesPerSecond-1 {
+		err = fmt.Errorf("failed to parse frames, frames value can't be more than %d", framesPerSecond-1)
 		return
 	}
 

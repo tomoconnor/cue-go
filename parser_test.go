@@ -37,16 +37,16 @@ func TestParseCommand(t *testing.T) {
 		}
 
 		if cmd != tt.Etalon.Cmd {
-			t.Fatalf("Parsed command '%s' but '%s' expected", cmd, tt.Etalon.Cmd)
+			t.Fatalf("parsed command '%s' but '%s' expected", cmd, tt.Etalon.Cmd)
 		}
 
 		if len(params) != len(tt.Etalon.Params) {
-			t.Fatalf("Parsed %d params but %d expected", len(params), len(tt.Etalon.Params))
+			t.Fatalf("parsed %d params but %d expected", len(params), len(tt.Etalon.Params))
 		}
 
 		for i := 0; i < len(params); i++ {
 			if params[i] != tt.Etalon.Params[i] {
-				t.Fatalf("Parsed '%s' parameter but '%s' expected", params[i], tt.Etalon.Params[i])
+				t.Fatalf("parsed '%s' parameter but '%s' expected", params[i], tt.Etalon.Params[i])
 			}
 		}
 	}
@@ -60,25 +60,25 @@ type timeExpected struct {
 
 func TestParseTime(t *testing.T) {
 	var tests = map[string]timeExpected{
-		"01:02:03": timeExpected{1, 2, 3},
-		"11:22:33": timeExpected{11, 22, 33},
-		"14:00:00": timeExpected{14, 0, 0},
+		"01:02:03": {1, 2, 3},
+		"11:22:33": {11, 22, 33},
+		"14:00:00": {14, 0, 0},
 	}
 
 	for input, expected := range tests {
 		min, sec, frames, err := parseTime(input)
 		if err != nil {
-			t.Fatalf("Time parsing failed. Input string: '%s'. %", input, err.Error())
+			t.Fatalf("time parsing failed, input string: '%s', error: %v", input, err)
 		}
 
 		if min != expected.min {
-			t.Fatalf("Expected %d minutes, but %d recieved.", expected.min, min)
+			t.Fatalf("expected %d minutes, but %d recieved.", expected.min, min)
 		}
 		if sec != expected.sec {
-			t.Fatalf("Expected %d seconds, but %d recieved.", expected.sec, sec)
+			t.Fatalf("expected %d seconds, but %d recieved.", expected.sec, sec)
 		}
 		if frames != expected.frames {
-			t.Fatalf("Expected %d frames, but %d recieved.", expected.frames, frames)
+			t.Fatalf("expected %d frames, but %d recieved.", expected.frames, frames)
 		}
 	}
 }

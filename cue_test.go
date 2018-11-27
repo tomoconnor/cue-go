@@ -1,7 +1,6 @@
 package cue
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -14,10 +13,8 @@ func TestPackage(t *testing.T) {
 		t.Fatalf("Failed to open file. %s", err.Error())
 	}
 
-	sheet, err := Parse(file)
+	_, err = Parse(file)
 	if err != nil {
 		t.Fatalf("Failed to parse file. %s", err.Error())
 	}
-
-	fmt.Printf("Sheet: %V\n", sheet)
 }
