@@ -5,11 +5,12 @@ package cue
 import (
 	"bufio"
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // commandParser is the function for parsing one command.
