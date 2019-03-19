@@ -1,5 +1,10 @@
 package cue
 
+import (
+	"path/filepath"
+	"strings"
+)
+
 const (
 	framesPerSecond = 75
 
@@ -142,4 +147,24 @@ func (t *Track) StartTime() (time Time) {
 
 func (t *Track) Duration() float64 {
 	return t.EndPosition - t.StartPosition
+}
+
+func (s *Sheet) FileTrackCount(fileName string) int {
+	fileName = strings.TrimSuffix(fileName, filepath.Ext(fileName))
+	for _, f := range s.Files {
+		if strings.TrimSuffix(f.Name, filepath.Ext(f.Name)) == fileName {
+			return len(f.Tracks)
+		}
+	}
+	return 0
+}
+
+func (s *Sheet) FileTracks(fileName string) []*Track {
+	fileName = strings.TrimSuffix(fileName, filepath.Ext(fileName))
+	for _, f := range s.Files {
+		if strings.TrimSuffix(f.Name, filepath.Ext(f.Name)) == fileName {
+			return f.Tracks
+		}
+	}
+	return make([]*Track, 0)
 }
