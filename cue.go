@@ -9,8 +9,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/pkg/errors"
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
 )
 
 // commandParser is the function for parsing one command.
@@ -52,7 +55,8 @@ func Parse(reader io.Reader, durations ...float64) (sheet *Sheet, err error) {
 			return nil, err
 		}
 
-		line := strings.TrimSpace(string(buf))
+		line, _, _ := transform.String(runes.Remove(runes.In(unicode.Mn)), string(buf))
+		line = strings.TrimSpace(line)
 
 		// Skip empty lines.
 		if len(line) == 0 {
