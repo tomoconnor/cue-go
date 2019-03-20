@@ -72,10 +72,10 @@ func Parse(reader io.Reader, durations ...float64) (sheet *Sheet, err error) {
 		}
 
 		paramsExpected := parserDescriptor.paramsCount
-		paramsRecieved := len(params)
-		if paramsExpected != -1 && paramsExpected != paramsRecieved {
+		paramsReceived := len(params)
+		if paramsExpected != -1 && paramsExpected != paramsReceived {
 			return nil, fmt.Errorf("line %d: command %s: recieved %d parameters but %d expected",
-				lineNumber, cmd, paramsRecieved, paramsExpected)
+				lineNumber, cmd, paramsReceived, paramsExpected)
 		}
 
 		err = parserDescriptor.parser(params, sheet)
