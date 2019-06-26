@@ -168,3 +168,10 @@ func (s *Sheet) FileTracks(fileName string) []*Track {
 	}
 	return make([]*Track, 0)
 }
+
+func (s *Sheet) TracksCount() (c int) {
+	for _, f := range s.Files {
+		c += len(f.Tracks)
+	}
+	return
+}
