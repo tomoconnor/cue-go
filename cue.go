@@ -222,11 +222,11 @@ func parseIndex(params []string, sheet *Sheet) error {
 	}
 
 	// The first index of a file must start at 00:00:00.
-	if getFileLastIndex(getCurrentFile(sheet)) == nil {
-		if min+sec+frames != 0 {
-			return errors.New("first track index must start at 00:00:00")
-		}
-	}
+	// if getFileLastIndex(getCurrentFile(sheet)) == nil {
+	// 	if min+sec+frames != 0 {
+	// 		return errors.New("first track index must start at 00:00:00")
+	// 	}
+	// }
 
 	// This is the first track index?
 	if len(track.Indexes) == 0 {

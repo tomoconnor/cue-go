@@ -3,10 +3,11 @@ package cue
 import (
 	"bytes"
 	"fmt"
-	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/pkg/errors"
 )
 
 // parseCommand retrive string line and parses it with the following algorythm:
@@ -58,11 +59,11 @@ func parseCommand(line string) (cmd string, params []string, err error) {
 
 					s, e := parseEscapeSequence(line[i : i+2])
 					if e != nil {
-						err = e
-						return
+						param.WriteByte(c)
+					} else {
+						param.WriteByte(s)
+						i++
 					}
-					param.WriteByte(s)
-					i++
 				} else {
 					param.WriteByte(c)
 				}
@@ -79,11 +80,11 @@ func parseCommand(line string) (cmd string, params []string, err error) {
 
 					s, e := parseEscapeSequence(line[i : i+2])
 					if e != nil {
-						err = e
-						return
+						param.WriteByte(c)
+					} else {
+						param.WriteByte(s)
+						i++
 					}
-					param.WriteByte(s)
-					i++
 				} else {
 					param.WriteByte(c)
 				}

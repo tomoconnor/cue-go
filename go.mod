@@ -1,4 +1,4 @@
-module github.com/Coppertino/cue-go
+module github.com/Lotlab/cue-go
 
 go 1.12
 
