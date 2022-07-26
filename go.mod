@@ -1,4 +1,4 @@
-module github.com/Lotlab/cue-go
+module github.com/tomoconnor/cue-go
 
 go 1.12
 
